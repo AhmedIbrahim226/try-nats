@@ -1,4 +1,6 @@
+
+
 class ManageSubServerStatus:
     all_subservers = {}
-    live_subservers = {}
+    available_subservers = {}
     busy_subservers = {}
