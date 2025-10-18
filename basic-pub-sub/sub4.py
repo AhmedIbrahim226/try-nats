@@ -1,4 +1,6 @@
 import asyncio
+from datetime import datetime
+
 import nats
 
 
@@ -6,23 +8,28 @@ async def main():
     async def close_done():
         print("CLOSED")
 
-    # Connect to the local NATS server
+
     nc = await nats.connect("nats://localhost:4222", closed_cb=close_done, name="sub_server_4")
 
-    # Define a callback function to handle received messages
+
     async def message_handler(msg):
         subject = msg.subject
         data = msg.data.decode()
         print(f"Received a message on '{subject}': {data}")
 
-    # Subscribe to the subject 'greetings' and assign the callback
-    # The 'greetings' subject is like a channel or topic name.
-    sub = await nc.subscribe(subject="greetings1", cb=message_handler)
-    print(f"Subscribed to 'greetings'. Waiting for messages...")
+
+    async def task_handler(msg):
+        await asyncio.sleep(10)
+        print(datetime.utcnow(), 5 * f"{msg.data.decode()}")
+
+    sub = await nc.subscribe(subject="sub-server-health", cb=message_handler)
+
+    worker_sub = await nc.subscribe(subject="manage-tasks", queue="manage-tasks-worker", cb=task_handler)
+    print(f"Subscribed to 'manage-tasks'. Waiting for messages...")
+
     # await sub.unsubscribe(limit=1)
 
-    # Keep the subscription alive. Wait for incoming messages.
-    # You can use asyncio events for more complex control.
+
     await asyncio.Future()
 
 
