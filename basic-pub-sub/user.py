@@ -1,4 +1,5 @@
 import asyncio
+from pprint import pprint
 from time import sleep
 
 from pub import init_nats_conn
@@ -13,8 +14,8 @@ async def main ():
     # while True:
     #     inp = input("Input Message: ")
     for i in range(30):
-        await nc.publish("manage-tasks", f"{"mohamed"}".encode())
-        # await asyncio.sleep(0.5)
+        pub = await nc.publish("server-link", f"{"x"}".encode())
+        await asyncio.sleep(0.5)
 
 
 if __name__ == '__main__':

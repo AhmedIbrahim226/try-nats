@@ -20,7 +20,7 @@ async def main():
 
     nc = await init_nats_conn()
     message = f"Hello, World! #Sub-Servers"
-    await nc.publish("sub-server-health", message.encode())
+    await nc.publish("server-link", message.encode())
     print(f"Published: {message}")
 
 
@@ -32,7 +32,7 @@ async def main():
                 connections = body["connections"]
                 # pprint(connections)
                 print("------------------------")
-                sub_servers = list(filter(lambda i: re.search(r"\bsub_server\w*\b", i.get("name", "")) and "sub-server-health" in i["subscriptions_list"] , connections))
+                sub_servers = list(filter(lambda i: re.search(r"\bsub_server\w*\b", i.get("name", "")) and "server-link" in i["subscriptions_list"] , connections))
                 for sub_server_info in sub_servers:
                     print(sub_server_info["name"])
                 print("Content-type:", response.headers['content-type'])

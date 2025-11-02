@@ -1,2 +1,8 @@
 .idea
 env
+*.pyc
+__pycache__
+*/__pycache__/
+*/*/__pycache__/
+*/*/*/__pycache__/
+basic-pub-sub/

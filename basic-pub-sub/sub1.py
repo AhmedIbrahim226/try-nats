@@ -1,6 +1,7 @@
 import asyncio
 import nats
-from datetime import datetime
+from datetime import datetime, UTC
+
 
 async def main():
     async def close_done():
@@ -14,13 +15,10 @@ async def main():
         print(f"Received a message on '{subject}': {data}")
 
     async def task_handler(msg):
-        await asyncio.sleep(10)
-        print(datetime.utcnow(), 5 * f"{msg.data.decode()}")
+        await asyncio.sleep(3)
+        print(datetime.now(tz=UTC), 5 * f"{msg.data.decode()}")
 
-    sub = await nc.subscribe(subject="sub-server-health", cb=message_handler)
-    worker_sub = await nc.subscribe(subject="manage-tasks", queue="manage-tasks-worker", cb=task_handler)
-
-    print(f"Subscribed to 'manage-tasks'. Waiting for messages...")
+    sub = await nc.subscribe(subject="server-link", cb=message_handler)
 
     # await sub.unsubscribe(limit=1)
 
