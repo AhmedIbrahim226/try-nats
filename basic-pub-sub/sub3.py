@@ -8,7 +8,7 @@ async def main():
     async def close_done():
         print("CLOSED")
 
-    nc = await nats.connect("nats://localhost:4222", closed_cb=close_done, name="sub_server_3")
+    nc = await nats.connect("nats://localhost:4222", closed_cb=close_done, name="9.10.11.12")
 
     async def message_handler(msg):
         subject = msg.subject

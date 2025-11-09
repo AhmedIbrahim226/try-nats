@@ -7,13 +7,18 @@ import aiohttp
 import nats
 
 
+
+async def disconnected_cb():
+    print("DISCONNECTED")
+
+
 async def closed_cb():
     print("CLOSED")
 
 
 async def init_nats_conn():
     # Connect to the server
-    nc = await nats.connect("nats://localhost:4222", closed_cb=closed_cb)
+    nc = await nats.connect("nats://localhost:4222", disconnected_cb=disconnected_cb, closed_cb=closed_cb)
     return nc
 
 async def main():

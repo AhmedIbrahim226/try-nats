@@ -4,10 +4,13 @@ from datetime import datetime, UTC
 
 
 async def main():
-    async def close_done():
+    async def disconnected_cb():
+        print("DISCONNECTED")
+
+    async def closed_cb():
         print("CLOSED")
 
-    nc = await nats.connect("nats://localhost:4222", closed_cb=close_done, name="sub_server_1")
+    nc = await nats.connect("nats://localhost:4222", closed_cb=closed_cb, disconnected_cb=disconnected_cb, name="1.2.3.4")
 
     async def message_handler(msg):
         subject = msg.subject
