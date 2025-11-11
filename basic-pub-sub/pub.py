@@ -11,6 +11,8 @@ import nats
 async def disconnected_cb():
     print("DISCONNECTED")
 
+async def reconnected_cb():
+    nats_log.warning("RECONNECTED")
 
 async def closed_cb():
     print("CLOSED")
@@ -18,7 +20,7 @@ async def closed_cb():
 
 async def init_nats_conn():
     # Connect to the server
-    nc = await nats.connect("nats://localhost:4222", disconnected_cb=disconnected_cb, closed_cb=closed_cb)
+    nc = await nats.connect("nats://localhost:4222", closed_cb=closed_cb, disconnected_cb=disconnected_cb, reconnected_cb=reconnected_cb)
     return nc
 
 async def main():
@@ -35,12 +37,11 @@ async def main():
                 print("Status:", response.status)
                 body = await response.json()
                 connections = body["connections"]
-                # pprint(connections)
+
                 print("------------------------")
-                sub_servers = list(filter(lambda i: re.search(r"\bsub_server\w*\b", i.get("name", "")) and "server-link" in i["subscriptions_list"] , connections))
+                sub_servers = filter(lambda i: re.search(r"\bsub_server\w*\b", i.get("name", "")) and "server-link" in i["subscriptions_list"] , connections)
                 for sub_server_info in sub_servers:
                     print(sub_server_info["name"])
-                print("Content-type:", response.headers['content-type'])
                 print("------------------------")
 
 
