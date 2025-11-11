@@ -12,7 +12,7 @@ async def disconnected_cb():
     print("DISCONNECTED")
 
 async def reconnected_cb():
-    nats_log.warning("RECONNECTED")
+    print("DISCONNECTED")
 
 async def closed_cb():
     print("CLOSED")
